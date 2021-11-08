@@ -1,13 +1,22 @@
-import { useState, memo } from "react";
+import { useState } from "react";
 import Paper from '@mui/material/Paper';
 import { FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, TextField} from "@mui/material";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from "@mui/material/Button";
+import { login_user, create_user } from "./fb-functions";
 
 enum AuthPage {
     LOGIN,
     REGISTER
+}
+
+async function onLogin(email: string, password: string) {
+    login_user(email, password)
+}
+
+async function onRegister(email: string, password: string) {
+    create_user(email, password)
 }
 
 export function AuthScreen() {
@@ -77,7 +86,9 @@ function Login(props: any) {
         <Button 
         variant="contained" 
         sx={{width: '100%', marginBottom: 6}}
-        >Login
+        onClick={() => onLogin(form.email, form.password)}
+        >
+            Login
         </Button>
         <p className="auth-text text-link">Forgot your password?</p>
         <hr className="line-sep"/>
@@ -152,7 +163,13 @@ function Register(props: any) {
             onChange={onChange('confirmPassword')}
         />
     </FormControl>
-    <Button variant="contained" sx={{width: '100%', marginBottom: 3}}>Register</Button>
+    <Button 
+    variant="contained"
+    sx={{width: '100%', marginBottom: 3}}
+    onClick={() => onRegister(form.email, form.password)}
+    >
+        Register
+    </Button>
     <hr className="line-sep"/>
     <p className="auth-text">Already have an account? 
         <span className="text-link" onClick={() => props.goToLogin()}> Sign in!</span>
