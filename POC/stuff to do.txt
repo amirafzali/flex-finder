@@ -1,5 +1,0 @@
-add custom date for timeslots available
-make everything lowercase
-add removal logic for accept logic for user to terminate active appointment
-
-Needs to add functionality to update timeslots available, workout types, etc for profile

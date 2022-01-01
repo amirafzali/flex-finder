@@ -1,9 +1,15 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
+/POC/realtimeDatabase/venv_win
+/POC/realtimeDatabase/.idea
+/POC/Firestore/venv_win
+/POC/Firestore/.idea
+/.idea
 /node_modules
 /.pnp
 .pnp.js
+serviceAccountKey.json
 
 # testing
 /coverage

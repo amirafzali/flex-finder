@@ -1,0 +1,36 @@
+add custom date for timeslots available
+make everything lowercase
+add removal logic for accept logic for user to terminate active appointment
+
+Needs to add functionality to update timeslots available, workout types, etc for profile
+
+
+FIRESTORE:
+----------------
+
+Create collection for Profile, Search, Scheduler
+Profile will also have scheduler stuff but we will want to have a seperate collection also so that it is easier to search for things
+via firestore query opeartors on the documents(userid: scheduler stuff) of the given scheduler collection.
+
+Otherwise, the format will remain the same!
+May try experimenting with regex for search!
+Need to port existing app to firestore potentially! Easier to then move to javascript!
+Use login ID or username from login step as the username stuff for firestore.
+
+Add search functionality such that it prompts user to enter school, gym(auto populates after school), exercise time, username, time interval.
+	-> This way, atleast one of the options has to be filled to be searched.
+	-> THe search will be made easy now since we can simplfy run a query over the schedulability collection which will essentially
+		go through each username and the corresponding fields searched with others remain unused, thus easier search.
+
+
+MUST TEST ALL THIS IN PYTHON for firestore and searchability before moving to react, saves hassle!
+
+            
+            .update(
+            {f'timeslots_available.{appointment_id}': firestore.DELETE_FIELD})
+
+
+
+NEED TO TEST IF SCHEDULER WORKS CORRECTLY!
+add functionality to update profile appointments etc, have one of the other guys do that.
+ad integration for signup firebase authentication.
