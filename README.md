@@ -26,7 +26,8 @@ TBD
 ```installation:
 Install node/npm if you haven't already: https://nodejs.org/en/download/
 git clone https://github.com/amirafzali/flex-finder.git
-Use code editor of your choice(VS CODE) and cd into the main directory
+Use code editor of your choice(VS CODE) and cd into the main directory.
+Pastee your `process.env` file in this directory. This contains information on API keys for firebase, you can retrieve it from your Firebase console --> project --> project settings
 type `npm install`. This will use the package.json to install all the necessary libraries for the project
 type `npm start`
 navigate to --> localhost:3000
