@@ -95,7 +95,7 @@ export default function MainMenu(props:any){
                 <Button 
                     variant="contained"
                     sx={{width: '100%', marginLeft: 1, marginBottom: 3}}
-                    onClick={() => {alert("IN DEVELOPMENT..."); console.log("FitnessTrack")}}
+                    onClick={() => navigate("/tracker", {state: username})}
                     >
                         MyFitnessTrack
                 </Button>

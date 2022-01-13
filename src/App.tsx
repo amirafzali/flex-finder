@@ -11,6 +11,7 @@ import { AuthScreen} from "./authenticate/AuthFlow"
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainMenu from "./MainMenu/MainMenu"
+import { FitnessTracker } from './tracker/FitnessTracker';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path={"/mainmenu"} element={<MainMenu />}></Route>
             <Route path={"/search"} element={<SearchFlow />}></Route>
             <Route path={"/scheduler"} element={<SchedulerFlow />}></Route>
+            <Route path={"/tracker"} element={<FitnessTracker />}></Route>
             <Route
               path="*"
               element={
