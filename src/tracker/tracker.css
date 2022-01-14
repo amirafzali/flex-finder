@@ -16,3 +16,9 @@
     margin-top: 25px;
     justify-content: center;
 }
+
+.input-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
