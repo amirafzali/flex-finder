@@ -4,10 +4,14 @@ import { FormControl, InputLabel, OutlinedInput,  TextField, Select, MenuItem, B
 import { useEffect, useState } from "react";
 
 import {Container} from "react-bootstrap";
-import { create_new_profile } from "../profile/profile_functions";
+import { create_new_profile, get_profile_data } from "../profile/profile_functions";
 import { getGyms, getSchools, getWorkoutTypes } from "../search/Search";
 import {days, initialFormState} from './data';
 import ProfileTimePicker, {TimeslotObject}  from './ProfileTimePicker';
+import {useLocation} from 'react-router-dom';
+import {AuthPage} from '../authenticate/AuthFlow';
+import { DocumentData } from "firebase/firestore";
+
 
 const centeredFieldStyle = {
     width: '80%',
@@ -16,15 +20,17 @@ const centeredFieldStyle = {
     marginBottom: 2
 }
 
-export default function ProfileView(props:any){
+export default function ProfileView(props: any){
 
 
     const [schoolNames, setSchoolNames] = useState<Array<string>>([""]);
     const [gymNames, setGymNames] = useState<Array<string>>([""]);
     const [workoutNames, setWorkoutNames] = useState<Array<string>>([""]);
 
+    const location: {[key: string]: any} = useLocation();
+
     // Forms states
-    const [form, setForm] = useState(initialFormState);
+    const [form, setForm] = useState<DocumentData>(initialFormState);
 
     // Error states
     const [errorState, seterrorState] = useState(false);
@@ -55,7 +61,7 @@ export default function ProfileView(props:any){
     };
  
     const onChangeTimeslots = (field: string, value: string) => {
-        setForm({...form, timeslots: {...form.timeslots, [field]: value} });
+        setForm({...form, timeslots: {...form.timeslots_available, [field]: value} });
     };
 
     const assignSchoolNames = async () => {
@@ -79,9 +85,20 @@ export default function ProfileView(props:any){
         }
     }
 
+    const setFormState = async () => {
+        const profileData = await get_profile_data(location.state);
+        if (profileData != null){
+            console.log(profileData);
+            setForm(profileData);
+        }
+    }
+
 
     // update initially
     useEffect(() => {
+        if (props.mode === AuthPage.MAIN_MENU){
+            setFormState()
+        }
         assignSchoolNames();
         assignGymNames();
         assignWorkoutNames();
@@ -150,7 +167,7 @@ export default function ProfileView(props:any){
                 labelId="demo-multiple-name-label"
                 id="demo-multiple-name"
                 multiple
-                value={form.gyms}
+                value={[form.gyms]}
                 onChange={onChange('gyms')}
                 input={<OutlinedInput label="Gyms" />}
                 >
@@ -171,7 +188,8 @@ export default function ProfileView(props:any){
                 labelId="demo-multiple-name-label"
                 id="demo-multiple-name"
                 multiple
-                value={form.workout_types}
+                // TODO handle this in a cleaner way
+                value={props.mode === AuthPage.MAIN_MENU ? [form.workout_types] : form.workout_types}
                 onChange={onChange('workout_types')}
                 input={<OutlinedInput label="workout types" />}
                 >
@@ -196,7 +214,8 @@ export default function ProfileView(props:any){
                     <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={form.timeslots.day}
+                        // TODO handle this in a cleaner way
+                        value={props.mode === AuthPage.MAIN_MENU ? [form.timeslots_available.day] : form.timeslots_available.day}
                         onChange={(event: any) => onChangeTimeslots('day', event.target.value)}
                         label="day"
                     >
@@ -223,7 +242,7 @@ export default function ProfileView(props:any){
                 variant="contained" color='success' 
                 sx={centeredFieldStyle}
                 onClick={() => {console.log("SUBMIT pressed\n", form); 
-                onRegisterDetails(form.username, form.gender, form.gyms, form.school, form.workout_types, [form.timeslots])}}
+                onRegisterDetails(form.username, form.gender, form.gyms, form.school, form.workout_types, [form.timeslots_available])}}
             >
                 Submit
             </Button>

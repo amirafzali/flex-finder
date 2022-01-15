@@ -15,7 +15,7 @@ import { create_user } from "./fb-functions";
 
 import ProfileView from '../profile/ProfileView';
 
-enum AuthPage {
+export enum AuthPage {
     LOGIN,
     REGISTER,
     REGISTER_DETAILS,

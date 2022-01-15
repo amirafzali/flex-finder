@@ -9,6 +9,8 @@ import { collection, Firestore, getDoc, doc, getDocs, updateDoc, deleteField, se
 import { db } from "../firebase/firebase";
 import {search_by_timeslot} from "../search/Search"
 import {v4 as uuidv4} from "uuid"
+import { DocumentData } from "firebase/firestore";
+
 
 interface timeslot_object {
     day: string,
@@ -92,7 +94,7 @@ export async function edit_profile(username: string, field: string, value: any){
 
 
 
-export async function get_profile_data(username: string){
+export async function get_profile_data(username: string) : Promise<DocumentData | null>{
     // Collections
     const profileCollection = collection(db,"Profile");
     // Profile Documents
@@ -102,9 +104,9 @@ export async function get_profile_data(username: string){
 
     // PRE-CONDITION CHECKS
     // Valid username
-    if (!(profileData) || (typeof profileData === undefined) || (typeof profileData === null)){
+    if (profileData == null){
         console.log(username + " is invalid target username. Please use a valid username");
-        return;
+        return null;
     }
 
     if (profileData){

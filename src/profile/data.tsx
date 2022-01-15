@@ -1,4 +1,6 @@
- // UI selectable dropdown states
+import { DocumentData } from "firebase/firestore";
+
+// UI selectable dropdown states
  export const days = [
     {label: 'None', value: ""},
     {label: 'mon', value: 'mon'},
@@ -10,13 +12,13 @@
     {label: 'sun', value: 'sun'},
 ];
 
-export const initialFormState = {
+export const initialFormState : DocumentData = {
     username: "",
     gyms: [],
     gender: "",
     school: "",
     workout_types: [],
-    timeslots:{
+    timeslots_available:{
         day: "",
         start_time: "",
         end_time: ""

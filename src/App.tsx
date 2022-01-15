@@ -14,12 +14,17 @@ import MainMenu from "./MainMenu/MainMenu"
 import { FitnessTracker } from './tracker/FitnessTracker';
 import ProfileView from './profile/ProfileView';
 import Paper from '@mui/material/Paper';
+import {AuthPage} from './authenticate/AuthFlow';
 
 function App() {
+
   const profileBox = (
     <Paper elevation={12} id="auth-box">
       <h1 id="auth-title">Profile Details</h1>
-      <ProfileView></ProfileView>
+      <ProfileView
+        mode={AuthPage.MAIN_MENU}
+      >
+      </ProfileView>
     </Paper>
   );
   return (
