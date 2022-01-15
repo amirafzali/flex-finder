@@ -87,7 +87,7 @@ export default function ProfileView(props: any){
 
     const setFormState = async () => {
         const profileData = await get_profile_data(location.state);
-        if (profileData != null){
+        if (profileData !== null){
             console.log(profileData);
             setForm(profileData);
         }

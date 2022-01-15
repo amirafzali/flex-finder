@@ -90,7 +90,7 @@ export function SchedulerViewActive(props: any){
     </Row>
 
     {
-        active != null && active != undefined && Object.keys(active).map((appointment_id:string, index:Number) => {
+        active !== null && active !== undefined && Object.keys(active).map((appointment_id:string, index:Number) => {
             let data = active[appointment_id];
             console.log(data['gym']);
             return (
@@ -163,7 +163,7 @@ export function SchedulerViewPending(props: any){
             </Button>
         </Row>
         {
-            pending != null && pending != undefined && Object.keys(pending).map((appointment_id:string, index:Number) => {
+            pending !== null && pending !== undefined && Object.keys(pending).map((appointment_id:string, index:Number) => {
                 let data = pending[appointment_id];
                 const is_sender = data['is_sender'];
 
@@ -189,7 +189,7 @@ export function SchedulerViewPending(props: any){
             </CardContent>
             <CardActions>
                 <Row>
-                {(is_sender==false) && // only display accept button for recipient - only recipient accepts
+                {(is_sender===false) && // only display accept button for recipient - only recipient accepts
                 <Col>  
                 <Button 
                     size="small"

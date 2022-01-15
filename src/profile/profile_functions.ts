@@ -35,7 +35,7 @@ export async function create_new_profile(username: string, gender: string, gyms:
     
     // validate inputs
     const res = await validate_inputs(username, gender, gyms, school, workout_types, timeslots_available)
-    if (res[0] == false){
+    if (res[0] === false){
         return res;
     }
 
@@ -104,7 +104,7 @@ export async function get_profile_data(username: string) : Promise<DocumentData 
 
     // PRE-CONDITION CHECKS
     // Valid username
-    if (profileData == null){
+    if (profileData === null){
         console.log(username + " is invalid target username. Please use a valid username");
         return null;
     }
@@ -129,14 +129,14 @@ async function validate_inputs(username: string, gender: string, gyms:Array<stri
     const profileData = await (getDoc(doc(profileCollection,username))).then((response)=>response.data())
 
     // validate username - check if already exists!
-    if ((profileData) || (typeof profileData == undefined) || (typeof profileData == null)){
+    if ((profileData) || (typeof profileData === undefined) || (typeof profileData === null)){
         console.log(profileData);
         console.log(username + " is invalid/or already taken. Please try another.");
         return [false, username + " is invalid/or already taken. Please try another."]
     }
 
     // validate gender
-    if (['m', 'f', 'other'].includes(gender) == false){
+    if (['m', 'f', 'other'].includes(gender) === false){
         console.log(gender + "is invalid");
         return [false, gender + "is invalid"]
     }
@@ -146,7 +146,7 @@ async function validate_inputs(username: string, gender: string, gyms:Array<stri
         const search_workout_type = await (getDoc(doc(searchCollection,"workout_type"))).then((response)=>response.data())
 
         if (search_workout_type){
-            if (search_workout_type.hasOwnProperty(workout_type) == false){
+            if (search_workout_type.hasOwnProperty(workout_type) === false){
                 console.log(workout_type + "is invalid");
                 return [false, workout_type + "is invalid"];
             }
@@ -156,7 +156,7 @@ async function validate_inputs(username: string, gender: string, gyms:Array<stri
     // validate school
     const search_school = await (getDoc(doc(searchCollection,"school"))).then((response)=>response.data())
     if (search_school){
-        if(search_school.hasOwnProperty(school) == false){
+        if(search_school.hasOwnProperty(school) === false){
             console.log(school + "is invalid");
             return [false, school + "is invalid"];
         }
@@ -167,7 +167,7 @@ async function validate_inputs(username: string, gender: string, gyms:Array<stri
         const search_gym = await (getDoc(doc(searchCollection,"gym"))).then((response)=>response.data())
 
         if (search_gym){
-            if (search_gym.hasOwnProperty(gym) == false){
+            if (search_gym.hasOwnProperty(gym) === false){
                 console.log(gym + "is invalid");
                 return [false, gym + "is invalid"];
             }
@@ -180,7 +180,7 @@ async function validate_inputs(username: string, gender: string, gyms:Array<stri
         const timeslot_start_time = Number(timeslot.start_time);
         const timeslot_end_time = Number(timeslot.end_time);
 
-        if (valid_days.includes(timeslot.day) == false){
+        if (valid_days.includes(timeslot.day) === false){
             console.log(timeslot.day + "is invalid day");
                 return [false, timeslot.day + "is invalid day"];
         }

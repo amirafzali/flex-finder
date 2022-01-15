@@ -132,12 +132,12 @@ export async function get_requests(username: string, status: string){
     // Return schedule.active or schedule.pending results, else NULL
     if (user_profile_object){
         if (user_profile_object.hasOwnProperty("schedule")){
-            if(status == "active"){
+            if(status === "active"){
                 console.log("RESULTS: ",user_profile_object['schedule']['active']);
                 return user_profile_object['schedule']['active'];
             }
 
-            else if (status == "pending"){
+            else if (status === "pending"){
                 console.log("RESULTS: ",user_profile_object['schedule']['pending']);
                 return user_profile_object['schedule']['pending'];
             }
@@ -183,7 +183,7 @@ export async function respond_requests(username: string, appointment_id: string,
      const timeslot = profileSnap_data[appointment_id]['timeslot'];
      const sender_username = profileSnap_data[appointment_id]['partner'];
 
-     if (!((response == "accept") || (response == "decline"))){
+     if (!((response === "accept") || (response === "decline"))){
         console.log("invalid response" + response);
         return
      }
@@ -191,7 +191,7 @@ export async function respond_requests(username: string, appointment_id: string,
      const sender_username_doc = doc(profileCollection,sender_username);
      const recipient_username_doc = doc(profileCollection, username);
 
-     if (response == "accept"){
+     if (response === "accept"){
          
          // Update active section for sender and recipient users
          let key = 'schedule.active.' + appointment_id;
@@ -238,7 +238,7 @@ export async function respond_requests(username: string, appointment_id: string,
 
             let id = '0';
             for (const [id_, user_timeslot] of Object.entries(recipientuserSnap_data)){
-                if ((user_timeslot['day'] == scheduled_day) && (user_timeslot['start_time'] == scheduled_start_hour) && (user_timeslot['end_time'] == scheduled_end_hour)){
+                if ((user_timeslot['day'] === scheduled_day) && (user_timeslot['start_time'] === scheduled_start_hour) && (user_timeslot['end_time'] === scheduled_end_hour)){
                     id = id_;
                     delete recipientuserSnap_data[id];
                     console.log(id, recipientuserSnap_data);
@@ -255,7 +255,7 @@ export async function respond_requests(username: string, appointment_id: string,
 
             let id = '0';
             for (const [id_, user_timeslot] of Object.entries(senderuserSnap_data)){
-                if ((user_timeslot['day'] == scheduled_day) && (user_timeslot['start_time'] == scheduled_start_hour) && (user_timeslot['end_time'] == scheduled_end_hour)){
+                if ((user_timeslot['day'] === scheduled_day) && (user_timeslot['start_time'] === scheduled_start_hour) && (user_timeslot['end_time'] === scheduled_end_hour)){
                     id = id_;
                     delete senderuserSnap_data[id];
                     console.log(id, senderuserSnap_data);
@@ -268,7 +268,7 @@ export async function respond_requests(username: string, appointment_id: string,
         }   
     }
 
-    else if (response == "decline"){
+    else if (response === "decline"){
         let key = 'schedule.pending.' + appointment_id;
         await updateDoc(sender_username_doc, {
             [key]: deleteField()

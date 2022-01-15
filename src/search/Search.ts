@@ -131,7 +131,7 @@ export async function search_function(username: string = "", gym: string = "", s
     }
 
     // TODO: get the value from promise
-    if (( (timeslots['day'] != "") && (Number(timeslots['start_time']) > -1) && (Number(timeslots['end_time']) > -1)) && users){
+    if (( (timeslots['day'] !== "") && (Number(timeslots['start_time']) > -1) && (Number(timeslots['end_time']) > -1)) && users){
         let users_ = search_by_timeslot(users,timeslots);
         return users_;
     }
@@ -163,7 +163,7 @@ export async function search_by_timeslot(users:Set<string>, timeslot:timeslot_ob
                 let end_time = user_timeslot['end_time'];
 
                 // console.log([user_day,day],[start_time, start_hour], [end_time, end_hour]);
-                if ((user_day == day) && (start_time == start_hour) && (end_time == end_hour)){
+                if ((user_day === day) && (start_time === start_hour) && (end_time === end_hour)){
                     valid_users.add(user);
                     // console.log("RAN");
                     break;

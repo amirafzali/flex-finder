@@ -19,7 +19,7 @@ export default function ProfileTimePicker({label, identifier, onChange}: Profile
         label={label}
         value={value}
         onChange={(newValue) => {
-          if (newValue != null){
+          if (newValue !== null){
             const hour = parseInt(newValue.toString().split(" ")[4].split(":")[0]).toString();
             setValue(newValue);
             onChange(identifier, hour);

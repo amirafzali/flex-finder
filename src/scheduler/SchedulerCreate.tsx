@@ -369,8 +369,8 @@ export function SchedulerCreateSearchResults(props: any){
 
     return (
         <Container>
-            {submitSuccess == 1 && <h2 style={{ color: 'green' }}>SUBMISSION SUCCESS!</h2>}
-            {submitSuccess == 2 && 
+            {submitSuccess === 1 && <h2 style={{ color: 'green' }}>SUBMISSION SUCCESS!</h2>}
+            {submitSuccess === 2 && 
             <Container>
             <h2 style={{ color: 'red' }}>Error: Submission Failed!</h2>
             <br>
