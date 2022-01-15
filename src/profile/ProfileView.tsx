@@ -3,10 +3,10 @@ import React from 'react';
 import { FormControl, InputLabel, OutlinedInput,  TextField, Select, MenuItem, Button} from "@mui/material";
 import { useEffect, useState } from "react";
 
-import {Container, Row, Col} from "react-bootstrap";
+import {Container} from "react-bootstrap";
 import { create_new_profile } from "../profile/profile_functions";
 import { getGyms, getSchools, getWorkoutTypes } from "../search/Search";
-import {days, hours, initialFormState} from './data';
+import {days, initialFormState} from './data';
 import ProfileTimePicker, {TimeslotObject}  from './ProfileTimePicker';
 
 const centeredFieldStyle = {
@@ -54,9 +54,8 @@ export default function ProfileView(props:any){
         setForm({ ...form, [field]: event.target.value });
     };
  
-    const onChangeTimeslots = (field: string) => (event: any) => {
-        console.log(event.target.value);
-        setForm({...form, timeslots: {...form.timeslots, [field]:event.target.value} });
+    const onChangeTimeslots = (field: string, value: string) => {
+        setForm({...form, timeslots: {...form.timeslots, [field]: value} });
     };
 
     const assignSchoolNames = async () => {
@@ -88,11 +87,9 @@ export default function ProfileView(props:any){
         assignWorkoutNames();
     }, []);
 
-    return(
+    return(        
         <Container>
-            {errorState && <h1 style={{color:"red"}}>{errorMsg}</h1>}
-
-            <h2 style={{textAlign: 'center'}}> Profile Details</h2>
+            <h1 style={{color:"red", display: errorState ? 'none' : 'inline'}}>{errorMsg}</h1>
             
             <h3 style={{textAlign: 'center'}}>Enter Details in lowercase!</h3>
 
@@ -200,7 +197,7 @@ export default function ProfileView(props:any){
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         value={form.timeslots.day}
-                        onChange={onChangeTimeslots('day')}
+                        onChange={(event: any) => onChangeTimeslots('day', event.target.value)}
                         label="day"
                     >
                         {days.map((option) => {
@@ -216,68 +213,21 @@ export default function ProfileView(props:any){
             
             </div>
         
-            <div style={{marginLeft: '3%'}}>
+            <div style={{marginLeft: '3%', marginBottom: '2%'}}>
                 <ProfileTimePicker label="Start Time" identifier="start_time" onChange={onChangeTimeslots}/>
                 <ProfileTimePicker label="End Time" identifier="end_time" onChange={onChangeTimeslots}/>
             </div>
 
-             {/* <Row> */}
+            
+            <Button 
+                variant="contained" color='success' 
+                sx={centeredFieldStyle}
+                onClick={() => {console.log("SUBMIT pressed\n", form); 
+                onRegisterDetails(form.username, form.gender, form.gyms, form.school, form.workout_types, [form.timeslots])}}
+            >
+                Submit
+            </Button>
 
-                 {/* <Col> */}
-                   
-                 {/* </Col> */}
-                 {/* <Col> */}
-                    <FormControl variant='filled' size="medium" sx={{ width: '100%', marginBottom: 2, marginRight: 4, marginLeft: 4}}>
-                    <InputLabel id="demo-simple-select-label">start time</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={form.timeslots.start_time}
-                        onChange={onChangeTimeslots('start_time')}
-                        label="start_time"
-                    >
-                        {hours.map((option) => {
-                            return (
-                                <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                                </MenuItem>
-                            );
-                        })}
-                    </Select>
-                    </FormControl>
-                 {/* </Col> */}
-                 {/* <Col> */}
-                    <FormControl variant='filled' size="medium" sx={{ width: '100%', marginBottom: 2, marginLeft: 8}}>
-                    <InputLabel id="demo-simple-select-label">end time</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={form.timeslots.end_time}
-                        onChange={onChangeTimeslots('end_time')}
-                        label="start_time"
-                    >
-                        {hours.map((option) => {
-                            return (
-                                <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                                </MenuItem>
-                            );
-                        })}
-                    </Select>
-                    </FormControl>
-                 {/* </Col> */}
-            {/* //  </Row> */}
-            {/* //  <Row> */}
-                {/* <Col> */}
-                    <Button 
-                    variant="contained" color='success' 
-                    sx={centeredFieldStyle}
-                    onClick={() => {console.log("SUBMIT pressed\n", form); onRegisterDetails(form.username, form.gender, form.gyms, form.school, form.workout_types, [form.timeslots])}}
-                    >
-                        Submit
-                    </Button>
-                 {/* </Col> */}
-            {/* </Row> */}
 
         </Container>
 

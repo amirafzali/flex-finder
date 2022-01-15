@@ -11,7 +11,7 @@ type ProfileTimePickerProps = {
 }
 
 export default function ProfileTimePicker({label, identifier, onChange}: ProfileTimePickerProps) {
-  const [value, setValue] = React.useState(null);
+  const [value, setValue] = React.useState<string | null>(null);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -20,9 +20,9 @@ export default function ProfileTimePicker({label, identifier, onChange}: Profile
         value={value}
         onChange={(newValue) => {
           if (newValue != null){
+            const hour = parseInt(newValue.toString().split(" ")[4].split(":")[0]).toString();
             setValue(newValue);
-            console.log(new Date(newValue).getTime());
-            onChange(identifier);
+            onChange(identifier, hour);
           }
         }}
         renderInput={(params) => <TextField {...params} />}
@@ -30,7 +30,6 @@ export default function ProfileTimePicker({label, identifier, onChange}: Profile
     </LocalizationProvider>
   );
 }
-
 
 export interface TimeslotObject {
     day: string,

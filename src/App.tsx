@@ -13,8 +13,15 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainMenu from "./MainMenu/MainMenu"
 import { FitnessTracker } from './tracker/FitnessTracker';
 import ProfileView from './profile/ProfileView';
+import Paper from '@mui/material/Paper';
 
 function App() {
+  const profileBox = (
+    <Paper elevation={12} id="auth-box">
+      <h1 id="auth-title">Profile Details</h1>
+      <ProfileView></ProfileView>
+    </Paper>
+  );
   return (
       <div className="center-container">
         <Router>
@@ -24,7 +31,7 @@ function App() {
             <Route path={"/search"} element={<SearchFlow />}></Route>
             <Route path={"/scheduler"} element={<SchedulerFlow />}></Route>
             <Route path={"/tracker"} element={<FitnessTracker />}></Route>
-            <Route path={"/profile"} element={<ProfileView/>}></Route>
+            <Route path={"/profile"} element={profileBox}></Route>
             <Route
               path="*"
               element={
