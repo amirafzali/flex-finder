@@ -18,6 +18,8 @@ interface timeslot_object {
 
 export async function load_existing_user(uid: string){
     const uidCollection = collection(db,"uid");
+    console.log(uidCollection);
+    
     const username = await getDoc(doc(uidCollection, uid)).then((res) => res.data());
 
     if (username){

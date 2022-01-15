@@ -19,7 +19,7 @@ import { create_user } from "./fb-functions";
 import {Container, Row, Col} from "react-bootstrap";
 import { create_new_profile } from "../profile/profile_functions";
 import { getGyms, getSchools, getWorkoutTypes } from "../search/Search";
-
+import ProfileView from '../profile/ProfileView';
 
 interface timeslot_object {
     day: string,
@@ -44,7 +44,7 @@ interface timeslot_object {
 */
 
 export function AuthScreen() {
-    const [page, setPage] = useState(AuthPage.LOGIN);
+    const [page, setPage] = useState(AuthPage.REGISTER_DETAILS); // CHANGE THIS to AuthPage.LOGIN when done
     const [username, setUsername] = useState<string|null>(null);
     const [uid, setUid] = useState<string|null>(null);
 
@@ -58,14 +58,14 @@ export function AuthScreen() {
         navigate("/mainmenu", {state: username})
     };
     
-    return <Paper elevation={12} id="auth-box">
-        <h1 id="auth-title">
-            FlexFinder 💪
-        </h1>
-        {page === AuthPage.LOGIN && <Login goToRegister={goToRegister} goToMainMenu={goToMainMenu}/>}
-        {page === AuthPage.REGISTER && <Register goToLogin={goToLogin} goToRegisterDetails={goToRegisterDetails}/>}
-        {page === AuthPage.REGISTER_DETAILS && <RegisterDetails uid={uid} goToMainMenu={goToMainMenu}/>}
-    </Paper>
+    return (
+        <Paper elevation={12} id="auth-box">
+            <h1 id="auth-title">Profile Details</h1>
+            {page === AuthPage.LOGIN && <Login goToRegister={goToRegister} goToMainMenu={goToMainMenu}/>}
+            {page === AuthPage.REGISTER && <Register goToLogin={goToLogin} goToRegisterDetails={goToRegisterDetails}/>}
+            {page === AuthPage.REGISTER_DETAILS && <ProfileView uid={uid} goToMainMenu={goToMainMenu}/>}
+        </Paper>
+    )
 }
 
 function Register(props: any) {
@@ -279,14 +279,23 @@ function RegisterDetails(props:any){
         assignWorkoutNames();
         }, []);
 
+    const centeredFieldStyle = {
+        width: '80%',
+        marginRight: '10%',
+        marginLeft: '10%',
+        marginBottom: 2
+    }
+
     return(
         <Container>
             {errorState && <h1 style={{color:"red"}}>{errorMsg}</h1>}
-            <h2>
-            Account Details Form
-            </h2>
-            <h3>Enter Details in lowercase!</h3>
-            <FormControl sx={{ width: '100%', marginBottom: 2, marginRight: 2}} variant="outlined">
+
+            <h2 style={{textAlign: 'center'}}> Profile Details</h2>
+            
+            <h3 style={{textAlign: 'center'}}>Enter Details in lowercase!</h3>
+
+            <FormControl sx={centeredFieldStyle} variant="outlined">
+
                 <TextField
                 label="Username"
                 size="small"
@@ -295,7 +304,8 @@ function RegisterDetails(props:any){
                 onChange={onChange('username')}
                 />
              </FormControl>
-            <FormControl sx={{ width: '100%', marginBottom: 2, marginRight: 2}}>
+
+            <FormControl sx={centeredFieldStyle}>
                 <InputLabel id="demo-multiple-name-label">Gender</InputLabel>
                 <Select
                 labelId="demo-multiple-name-label"
@@ -314,7 +324,8 @@ function RegisterDetails(props:any){
                 ))}
                 </Select>
             </FormControl>
-            <FormControl sx={{ width: '100%', marginBottom: 2, marginRight: 2}}>
+
+            <FormControl sx={centeredFieldStyle}>
                 <InputLabel id="demo-multiple-name-label">School</InputLabel>
                 <Select
                 labelId="demo-multiple-name-label"
@@ -333,7 +344,8 @@ function RegisterDetails(props:any){
                 ))}
                 </Select>
             </FormControl>
-            <FormControl sx={{ width: '100%', marginBottom: 2, marginRight: 2}}>
+
+            <FormControl sx={centeredFieldStyle}>
                 <InputLabel id="demo-multiple-name-label">Gyms - Select for ONLY your school</InputLabel>
                 <Select
                 labelId="demo-multiple-name-label"
@@ -353,7 +365,8 @@ function RegisterDetails(props:any){
                 ))}
                 </Select>
             </FormControl>
-            <FormControl sx={{ width: '100%', marginBottom: 2, marginRight: 2}}>
+
+            <FormControl sx={centeredFieldStyle}>
                 <InputLabel id="demo-multiple-name-label">Workout Types</InputLabel>
                 <Select
                 labelId="demo-multiple-name-label"
@@ -373,10 +386,11 @@ function RegisterDetails(props:any){
                 ))}
                 </Select>
             </FormControl>
-             Enter Timeslot Available:
-             <Row>
 
-                 <Col>
+             Enter Timeslot Available:
+             {/* <Row> */}
+
+                 {/* <Col> */}
                     <FormControl variant='filled' size="medium" sx={{ width: '100%', marginBottom: 2, marginRight: 3}}>
                     <InputLabel id="demo-simple-select-label">day</InputLabel>
                     <Select
@@ -395,8 +409,8 @@ function RegisterDetails(props:any){
                         })}
                     </Select>
                     </FormControl>
-                 </Col>
-                 <Col>
+                 {/* </Col> */}
+                 {/* <Col> */}
                     <FormControl variant='filled' size="medium" sx={{ width: '100%', marginBottom: 2, marginRight: 4, marginLeft: 4}}>
                     <InputLabel id="demo-simple-select-label">start time</InputLabel>
                     <Select
@@ -415,8 +429,8 @@ function RegisterDetails(props:any){
                         })}
                     </Select>
                     </FormControl>
-                 </Col>
-                 <Col>
+                 {/* </Col> */}
+                 {/* <Col> */}
                     <FormControl variant='filled' size="medium" sx={{ width: '100%', marginBottom: 2, marginLeft: 8}}>
                     <InputLabel id="demo-simple-select-label">end time</InputLabel>
                     <Select
@@ -435,10 +449,10 @@ function RegisterDetails(props:any){
                         })}
                     </Select>
                     </FormControl>
-                 </Col>
-             </Row>
-             <Row>
-                <Col>
+                 {/* </Col> */}
+            {/* //  </Row> */}
+            {/* //  <Row> */}
+                {/* <Col> */}
                     <Button 
                     variant="contained" color='success' 
                     sx={{width: '70%', marginLeft: 4}}
@@ -446,8 +460,8 @@ function RegisterDetails(props:any){
                     >
                         Submit
                     </Button>
-                 </Col>
-            </Row>
+                 {/* </Col> */}
+            {/* </Row> */}
 
         </Container>
 
