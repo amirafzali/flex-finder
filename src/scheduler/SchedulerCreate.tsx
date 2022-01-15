@@ -338,6 +338,7 @@ export function SchedulerCreateSearchResults(props: any){
     // update initially
     useEffect(() => {
         setSearchResults_profiledata(searchResults);
+        // eslint-disable-next-line
       }, []);
 
     const onChange = (field: string) => (event: any) => {

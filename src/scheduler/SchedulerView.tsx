@@ -73,6 +73,7 @@ export function SchedulerViewActive(props: any){
     // update Active initially
     useEffect(() => {
         onChangeActive();
+        // eslint-disable-next-line
       }, []);
     
     
@@ -147,6 +148,7 @@ export function SchedulerViewPending(props: any){
     // update pending initially
     useEffect(() => {
         onChangePending();
+        // eslint-disable-next-line
       }, []);
     
     

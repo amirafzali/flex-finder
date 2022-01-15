@@ -102,6 +102,7 @@ export default function ProfileView(props: any){
         assignSchoolNames();
         assignGymNames();
         assignWorkoutNames();
+        // eslint-disable-next-line
     }, []);
 
     return(        
