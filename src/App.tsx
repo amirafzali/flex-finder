@@ -12,6 +12,7 @@ import { AuthScreen} from "./authenticate/AuthFlow"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainMenu from "./MainMenu/MainMenu"
 import { FitnessTracker } from './tracker/FitnessTracker';
+import ProfileView from './profile/ProfileView';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path={"/search"} element={<SearchFlow />}></Route>
             <Route path={"/scheduler"} element={<SchedulerFlow />}></Route>
             <Route path={"/tracker"} element={<FitnessTracker />}></Route>
+            <Route path={"/profile"} element={<ProfileView/>}></Route>
             <Route
               path="*"
               element={
