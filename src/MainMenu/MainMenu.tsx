@@ -101,6 +101,20 @@ export default function MainMenu(props:any){
                 </Button>
                 </Col>
             </Row>
+            <Row>
+                <Col>
+                      
+                      <Button
+                        variant="contained"
+                        sx={{width: '100%', marginLeft:1, marginBottom: 3}}
+                        //onClick={() => navigate("/recommendations", {state:username})}
+                      >
+                          Recommendations
+
+                      </Button>
+
+                </Col>
+            </Row>
         </Container>
     )
 }
