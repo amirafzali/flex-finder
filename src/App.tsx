@@ -15,6 +15,7 @@ import { FitnessTracker } from './tracker/FitnessTracker';
 import ProfileView from './profile/ProfileView';
 import Paper from '@mui/material/Paper';
 import {AuthPage} from './authenticate/AuthFlow';
+import { Recommendations } from './recommendations/recommendations'
 
 function App() {
 
@@ -37,6 +38,7 @@ function App() {
             <Route path={"/scheduler"} element={<SchedulerFlow />}></Route>
             <Route path={"/tracker"} element={<FitnessTracker />}></Route>
             <Route path={"/profile"} element={profileBox}></Route>
+            <Route path={"/recommendations"} element={<Recommendations />}></Route>
             <Route
               path="*"
               element={
