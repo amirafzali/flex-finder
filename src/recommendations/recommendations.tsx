@@ -1,23 +1,42 @@
-import { useEffect, useState } from "react";
-import { collection, deleteDoc, doc, query, getDocs, where } from 'firebase/firestore';
+import { ReactChild, ReactFragment, ReactPortal, useEffect, useState } from "react";
+import { collection, deleteDoc, doc, query, getDocs, where, QuerySnapshot } from 'firebase/firestore';
 import { db } from "../firebase/firebase";
 import { useNavigate, useLocation } from "react-router-dom";
 import { get_profile_data } from "../profile/profile_functions"
+
+
+
 
 export const Recommendations = () => {
     const location: {[key: string]: any} = useLocation();
     const [username, setUsername] = useState<string>(location.state);
     const navigate = useNavigate(); // intents between pages
-
+    let dataSet: any[] = [];
+    let usernames: any[] = [];
+    let schools: String[] = [];
+    let exercises: any[] = [];
     useEffect(() => {
         async function fetchExisting() {
             const profileCollection = collection(db,"Profile");
             const q = query(profileCollection, where("School", "==", "mcmaster"))
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            console.log(doc.id, " => ", doc.data());
+                dataSet.push(doc);
+                //console.log(doc.data());
+                /*
+                usernames.push(doc.id);
+                schools.push(doc.get("School"));
+                exercises.push(doc.get("Workout_types"));
+                console.log(usernames[0]);
+                console.log(schools[0]);
+                console.log(exercises[0]); */
+                console.log(doc.id);
+                console.log(doc.get("School"));
+                console.log(doc.get("Workout_types"));
+                console.log(doc.get("Gyms"));
+
             });
+            
                   
         }
         fetchExisting();
@@ -32,10 +51,13 @@ export const Recommendations = () => {
                             Name
                         </th>
                         <th>
+                            School
+                        </th>
+                        <th>
                             Gym
                         </th>
                         <th>
-                            Exercise Types
+                            Exercises
                         </th>
                         <th>
                             Appointment
@@ -43,18 +65,15 @@ export const Recommendations = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>
-                            usernames[0]
-                        </td>
-                            <td>
-                            gyms[0]
-                        </td><td>
-                            Cardio
-                        </td><td>
-                            appointment button here
-                        </td>
-                    </tr> 
+                    {dataSet.map((doc) => (
+                        <tr>
+                            <td>{doc.id}</td>
+                            <td>{doc.get("School")}</td>
+                            <td>{doc.get("Gyms")}</td>
+                            <td>{doc.get("Workout_types")}</td>
+                            <td>Appointment Button Here</td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </div>
