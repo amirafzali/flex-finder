@@ -107,10 +107,9 @@ export default function MainMenu(props:any){
                       <Button
                         variant="contained"
                         sx={{width: '100%', marginLeft:1, marginBottom: 3}}
-                        //onClick={() => navigate("/recommendations", {state:username})}
+                        onClick={() => navigate("/recommendations", {state:username})}
                       >
                           Recommendations
-
                       </Button>
 
                 </Col>
