@@ -48,7 +48,7 @@ export default function MainMenu(props:any){
                 <Button 
                     variant="contained"
                     color="error"
-                    sx={{width: '100%', marginLeft: 12, marginRight: 1, marginBottom: 3}}
+                    sx={{width: '100%', maxWidth: '120px', marginLeft: 1, marginBottom: 3, float: 'right'}}
                     onClick={() => {signOut(firebaseAuth).then(() => {
                         // Sign-out successful.
                         alert("Sign out successful!");
@@ -83,6 +83,17 @@ export default function MainMenu(props:any){
                 </Button>
                 </Col>
                 <Col>
+                <Button
+                        variant="contained"
+                        sx={{width: '100%', marginLeft:1, marginBottom: 3}}
+                        onClick={() => navigate("/recommendations", {state:username})}
+                      >
+                          Recommendations
+                      </Button>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
                 <Button 
                     variant="contained"
                     sx={{width: '100%', marginLeft: 1, marginBottom: 3}}
@@ -98,20 +109,7 @@ export default function MainMenu(props:any){
                     onClick={() => navigate("/tracker", {state: username})}
                     >
                         MyFitnessTrack
-                </Button>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                      
-                      <Button
-                        variant="contained"
-                        sx={{width: '100%', marginLeft:1, marginBottom: 3}}
-                        onClick={() => navigate("/recommendations", {state:username})}
-                      >
-                          Recommendations
-                      </Button>
-
+                </Button>     
                 </Col>
             </Row>
         </Container>
