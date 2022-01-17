@@ -39,7 +39,7 @@ export function AuthScreen() {
     
     return (
         <Paper elevation={12} id="auth-box">
-            <h1 id="auth-title">Profile Details</h1>
+            <h1 id="auth-title">Flex Finder 💪</h1>
             {page === AuthPage.LOGIN && <Login goToRegister={goToRegister} goToMainMenu={goToMainMenu}/>}
             {page === AuthPage.REGISTER && <Register goToLogin={goToLogin} goToRegisterDetails={goToRegisterDetails}/>}
             {page === AuthPage.REGISTER_DETAILS && <ProfileView uid={uid} goToMainMenu={goToMainMenu}/>}
