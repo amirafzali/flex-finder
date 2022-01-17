@@ -11,7 +11,7 @@ import ProfileTimePicker, {TimeslotObject}  from './ProfileTimePicker';
 import {useLocation} from 'react-router-dom';
 import {AuthPage} from '../authenticate/AuthFlow';
 import { DocumentData } from "firebase/firestore";
-
+import {useAsyncEffect} from 'use-async-effect';
 
 const centeredFieldStyle = {
     width: '80%',
@@ -20,17 +20,55 @@ const centeredFieldStyle = {
     marginBottom: 2
 }
 
+type ProfileViewStaticData = {
+    schoolNames: string[],
+    gymNames: string[],
+    workoutNames: string[],
+}
+
+const emptyObject = Object.freeze({});
+
 export default function ProfileView(props: any){
 
+    const [data, setData] = useState<ProfileViewStaticData>({
+        schoolNames: [],
+        gymNames: [],
+        workoutNames: []
+    });
 
-    const [schoolNames, setSchoolNames] = useState<Array<string>>([""]);
-    const [gymNames, setGymNames] = useState<Array<string>>([""]);
-    const [workoutNames, setWorkoutNames] = useState<Array<string>>([""]);
 
+    // Form state
     const location: {[key: string]: any} = useLocation();
+    const username = location.state;
+    const [form, setForm] = useState<DocumentData>({...initialFormState, username});
 
-    // Forms states
-    const [form, setForm] = useState<DocumentData>(initialFormState);
+    useAsyncEffect(async (isActive) => {
+
+        if (props.mode === AuthPage.MAIN_MENU){
+            const profileData = await get_profile_data(username);
+            if (!isActive()) return;
+
+            if (profileData != null){
+                console.log(profileData);
+                setForm(profileData);
+            }
+        }  
+
+        const [schoolNames, gymNames, workoutNames] = await Promise.all([
+            getSchools(),
+            getGyms(),
+            getWorkoutTypes()
+        ]);
+
+        if (!isActive()) return;
+
+        setData({
+            schoolNames: Object.keys(schoolNames ?? emptyObject),
+            gymNames: Object.keys(gymNames ?? emptyObject),
+            workoutNames: Object.keys(workoutNames ?? emptyObject)
+        });
+
+    }, []);
 
     // Error states
     const [errorState, seterrorState] = useState(false);
@@ -57,52 +95,13 @@ export default function ProfileView(props: any){
     }
 
     const onChange = (field: string) => (event: any) => {
+        console.log(form);
         setForm({ ...form, [field]: event.target.value });
     };
  
     const onChangeTimeslots = (field: string, value: string) => {
         setForm({...form, timeslots: {...form.timeslots_available, [field]: value} });
     };
-
-    const assignSchoolNames = async () => {
-        const schools = await getSchools();
-        if (schools){
-            setSchoolNames(Object.keys(schools));
-        }
-    }
-
-    const assignGymNames = async () => {
-        const gyms = await getGyms();
-        if (gyms){
-            setGymNames(Object.keys(gyms));
-        }
-    }
-
-    const assignWorkoutNames = async () => {
-        const Workout_Types = await getWorkoutTypes();
-        if (Workout_Types){
-            setWorkoutNames(Object.keys(Workout_Types));
-        }
-    }
-
-    const setFormState = async () => {
-        const profileData = await get_profile_data(location.state);
-        if (profileData != null){
-            console.log(profileData);
-            setForm(profileData);
-        }
-    }
-
-
-    // update initially
-    useEffect(() => {
-        if (props.mode === AuthPage.MAIN_MENU){
-            setFormState()
-        }
-        assignSchoolNames();
-        assignGymNames();
-        assignWorkoutNames();
-    }, []);
 
     return(        
         <Container>
@@ -150,7 +149,7 @@ export default function ProfileView(props: any){
                 onChange={onChange('school')}
                 input={<OutlinedInput label="school" />}
                 >
-                {schoolNames.map((item) => (
+                {data.schoolNames.map((item) => (
                     <MenuItem
                     key={item}
                     value={item}
@@ -171,7 +170,7 @@ export default function ProfileView(props: any){
                 onChange={onChange('gyms')}
                 input={<OutlinedInput label="Gyms" />}
                 >
-                {gymNames.map((item) => (
+                {data.gymNames.map((item) => (
                     <MenuItem
                     key={item}
                     value={item}
@@ -193,7 +192,7 @@ export default function ProfileView(props: any){
                 onChange={onChange('workout_types')}
                 input={<OutlinedInput label="workout types" />}
                 >
-                {workoutNames.map((item) => (
+                {data.workoutNames.map((item) => (
                     <MenuItem
                     key={item}
                     value={item}
