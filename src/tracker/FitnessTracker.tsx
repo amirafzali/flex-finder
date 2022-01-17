@@ -36,7 +36,7 @@ enum ExerciseGroup {
     ABS = "Abs",
     BICEPS = "Biceps",
     TRICEPS = "Triceps",
-    CARIDO = "Cardio"
+    CARDIO = "Cardio"
 }
 
 enum WeightUnit {
@@ -75,7 +75,7 @@ const COMMON_EXERCISES: {[key: string]: string[]} =  {
     [ExerciseGroup.ABS]: [
         "Plank", "Twist", "Leg Raise", "Crunch"
     ],
-    [ExerciseGroup.CARIDO]: [
+    [ExerciseGroup.CARDIO]: [
         "Treadmill", "Step Climber", "Cycling", "Swimming", "Hiking"
     ]
 }
