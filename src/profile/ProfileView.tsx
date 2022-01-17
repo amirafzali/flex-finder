@@ -103,26 +103,24 @@ export default function ProfileView(props: any){
         setForm({...form, timeslots: {...form.timeslots_available, [field]: value} });
     };
 
-    const assignSchoolNames = async () => {
-        const schools = await getSchools();
-        if (schools){
-            setSchoolNames(Object.keys(schools));
-        }
-    }
-
-    const assignGymNames = async () => {
-        const gyms = await getGyms();
-        if (gyms){
-            setGymNames(Object.keys(gyms));
-        }
-    }
-
-    const assignWorkoutNames = async () => {
-        const Workout_Types = await getWorkoutTypes();
-        if (Workout_Types){
-            setWorkoutNames(Object.keys(Workout_Types));
-        }
-    }
+    // const assignSchoolNames = async () => {
+    //     const schools = await getSchools();
+    //     if (schools){
+    //         setSchoolNames(Object.keys(schools));
+    //     }
+    // }
+    // const assignGymNames = async () => {
+    //     const gyms = await getGyms();
+    //     if (gyms){
+    //         setGymNames(Object.keys(gyms));
+    //     }
+    // }
+    // const assignWorkoutNames = async () => {
+    //     const Workout_Types = await getWorkoutTypes();
+    //     if (Workout_Types){
+    //         setWorkoutNames(Object.keys(Workout_Types));
+    //     }
+    // }
 
     const setFormState = async () => {
         const profileData = await get_profile_data(location.state);
@@ -134,13 +132,24 @@ export default function ProfileView(props: any){
 
 
     // update initially
-    useEffect(() => {
-        if (props.mode === AuthPage.MAIN_MENU){
-            setFormState()
-        }
-        assignSchoolNames();
-        assignGymNames();
-        assignWorkoutNames();
+    useEffect(() => {     
+        // TODO @shazil-arif below might not be correct functionality but the commented
+        //  section above was calling setSchoolNames(), etc. which isn't in this file
+        (async () => {
+            if (props.mode === AuthPage.MAIN_MENU){
+                setFormState()
+            }
+            
+            const schools = await getSchools();
+            const gyms = await getGyms();
+            const Workout_Types = await getWorkoutTypes(); 
+            setData({
+                schoolNames: Object.keys(schools ?? emptyObject),
+                gymNames: Object.keys(gyms ?? emptyObject),
+                workoutNames: Object.keys(Workout_Types ?? emptyObject)
+            });
+        })();
+
         // eslint-disable-next-line
     }, []);
 
