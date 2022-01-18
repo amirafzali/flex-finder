@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { collection, deleteDoc, doc, setDoc } from 'firebase/firestore';
 import { db } from "../firebase/firebase";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getDocs } from 'firebase/firestore';
+import './tracker.css'
+import {Container} from "react-bootstrap";
+
 import Fab from "@mui/material/Fab";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -20,7 +23,6 @@ import TextField from "@mui/material/TextField";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import './tracker.css'
 import IconButton from "@mui/material/IconButton";
 import { Autocomplete } from "@mui/material";
 import { MenuItem } from "@mui/material";
@@ -132,6 +134,8 @@ export const FitnessTracker = () => {
     let [groupTime, setGroupTime] = useState(false);
     let [fitnessLogs, setFitnessLogs] = useState<{[key: number]: Log}>([]);
     const location: {[key: string]: any} = useLocation();
+    const navigate = useNavigate();
+
     const [username, setUsername] = useState<string>(location.state);
     const [addOpen, setAddOpen] = useState(false);
     const [editLog, setEditLog] = useState<Log | null>(null);
@@ -172,7 +176,7 @@ export const FitnessTracker = () => {
     }
 
     return (
-        <div className="tracker-container">
+        <Container className="tracker-container">
             <LogPrompt 
                 handleClose={handleClose}
                 open={addOpen}
@@ -197,7 +201,14 @@ export const FitnessTracker = () => {
                     <AddIcon />
                 </Fab>
             </div>
-        </div>
+            <Button 
+                variant="contained" 
+                sx={{width: '100%', margin: '1rem auto 0', maxWidth: '200px'}}
+                onClick={() => {navigate("/mainmenu", {state: username})}}
+                >
+                    Go Back
+            </Button>
+        </Container>
     )
 }
 

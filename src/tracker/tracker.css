@@ -1,6 +1,7 @@
 .tracker-container {
     width: 35vw;
     min-width: 500px;
+    text-align: center;
 }
 
 .logging-container {
