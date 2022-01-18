@@ -194,11 +194,11 @@ export default function SearchScreen(props:any){
                 ))}
                 </Select>
             </FormControl>
-         Enter Timeslots:
+         <p>Enter Timeslots:</p>
          <Row>
 
              <Col>
-                <FormControl variant='filled' size="medium" sx={{ width: '100%', marginBottom: 2, marginRight: 3}}>
+                <FormControl variant='filled' size="medium" sx={{ width: '100%', marginBottom: 2}}>
                 <InputLabel id="demo-simple-select-label">day</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
@@ -218,7 +218,7 @@ export default function SearchScreen(props:any){
                 </FormControl>
              </Col>
              <Col>
-                <FormControl variant='filled' size="medium" sx={{ width: '100%', marginBottom: 2, marginRight: 4, marginLeft: 4}}>
+                <FormControl variant='filled' size="medium" sx={{ width: '100%', marginBottom: 2}}>
                 <InputLabel id="demo-simple-select-label">start time</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
@@ -238,7 +238,7 @@ export default function SearchScreen(props:any){
                 </FormControl>
              </Col>
              <Col>
-                <FormControl variant='filled' size="medium" sx={{ width: '100%', marginBottom: 2, marginLeft: 8}}>
+                <FormControl variant='filled' size="medium" sx={{ width: '100%', marginBottom: 2}}>
                 <InputLabel id="demo-simple-select-label">end time</InputLabel>
                 <Select
                     labelId="demo-simple-select-label"
@@ -259,22 +259,22 @@ export default function SearchScreen(props:any){
              </Col>
          </Row>
          <Row>
-            <Col>
-                <Button 
-                variant="contained" color='success' 
-                sx={{width: '70%', marginLeft: 4}}
-                onClick={() => {console.log("SUBMIT pressed\n", form); display_results(form.username, form.gym, form.school, form.workout_type, form.timeslots)}}
-                >
-                    Submit
-                </Button>
-             </Col>
-             <Col>
+             <Col style={{textAlign: 'center'}}>
                 <Button 
                 variant="contained" 
-                sx={{width: '70%', marginLeft: 7}}
+                sx={{width: '200px'}}
                 onClick={() => {navigate("/mainmenu", {state: username})}}
                 >
                     Go Back
+                </Button>
+             </Col>
+            <Col style={{textAlign: 'center'}}>
+                <Button 
+                variant="contained" color='success' 
+                sx={{width: '200px'}}
+                onClick={() => {console.log("SUBMIT pressed\n", form); display_results(form.username, form.gym, form.school, form.workout_type, form.timeslots)}}
+                >
+                    Submit
                 </Button>
              </Col>
         </Row>
