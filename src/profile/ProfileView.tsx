@@ -3,12 +3,12 @@ import React from 'react';
 import { FormControl, InputLabel, OutlinedInput,  TextField, Select, MenuItem, Button} from "@mui/material";
 import { useEffect, useState } from "react";
 
-import {Container} from "react-bootstrap";
+import {Container, Row, Col} from "react-bootstrap";
 import { create_new_profile, get_profile_data } from "../profile/profile_functions";
 import { getGyms, getSchools, getWorkoutTypes } from "../search/Search";
 import {days, initialFormState} from './data';
 import ProfileTimePicker, {TimeslotObject}  from './ProfileTimePicker';
-import {useLocation} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {AuthPage} from '../authenticate/AuthFlow';
 import { DocumentData } from "firebase/firestore";
 import {useAsyncEffect} from 'use-async-effect';
@@ -39,6 +39,7 @@ export default function ProfileView(props: any){
 
     // Form state
     const location: {[key: string]: any} = useLocation();
+    const navigate = useNavigate();
     const username = location.state;
     const [form, setForm] = useState<DocumentData>({...initialFormState, username});
 
@@ -281,22 +282,37 @@ export default function ProfileView(props: any){
             
             </div>
         
-            <div style={{marginLeft: '3%', marginBottom: '2%'}}>
-                <ProfileTimePicker label="Start Time" identifier="start_time" onChange={onChangeTimeslots}/>
-                <ProfileTimePicker label="End Time" identifier="end_time" onChange={onChangeTimeslots}/>
-            </div>
+            <Row style={{marginLeft: '10%', marginRight: '10%', marginBottom: '5%'}}>
+                <Col style={{paddingLeft: 0, paddingRight: 20}}>
+                    <ProfileTimePicker label="Start Time" identifier="start_time" onChange={onChangeTimeslots}/>
+                </Col>
+                <Col style={{paddingLeft: 0, paddingRight: 0}}>
+                    <ProfileTimePicker label="End Time" identifier="end_time" onChange={onChangeTimeslots}/>
+                </Col>
+            </Row>
 
             
-            <Button 
-                variant="contained" color='success' 
-                sx={centeredFieldStyle}
-                onClick={() => {console.log("SUBMIT pressed\n", form); 
-                onRegisterDetails(form.username, form.gender, form.gyms, form.school, form.workout_types, [form.timeslots_available])}}
-            >
-                Submit
-            </Button>
-
-
+            <Row style={centeredFieldStyle}>
+                <Col style={{textAlign: 'center'}}>
+                    <Button
+                        sx={{width: '100%', maxWidth: '150px'}}
+                        variant="contained"
+                        onClick={() => {navigate("/mainmenu", {state: username})}}
+                        >
+                            Go Back
+                    </Button>
+                </Col>
+                <Col style={{textAlign: 'center'}}>
+                    <Button
+                        sx={{width: '100%', maxWidth: '150px'}}
+                        variant="contained" color='success'
+                        onClick={() => {console.log("SUBMIT pressed\n", form);
+                        onRegisterDetails(form.username, form.gender, form.gyms, form.school, form.workout_types, [form.timeslots_available])}}
+                    >
+                        Submit
+                    </Button>
+                </Col>
+            </Row>
         </Container>
 
     )
