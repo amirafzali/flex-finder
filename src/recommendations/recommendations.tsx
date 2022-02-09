@@ -7,13 +7,14 @@ import Table from 'react-bootstrap/Table'
 import { useNavigate, useLocation } from "react-router-dom";
 import { firebaseAuth } from "../firebase/firebase";
 import { getWorkoutTypes } from "../search/Search";
+import { get_profile_data } from "../profile/profile_functions";
 
 
 
 export const Recommendations = () => {
     const location:{ [key: string]: any } = useLocation();
+    const username = location.state;
     const navigate = useNavigate();
-    const [username, setUsername]= useState<string>(location.state);
 
     // const [userRecs, setUserRecs] = useState<{[key: number]: Log}>([]);
     const [userRecs, setUserRecs] = useState<TableRow[]>([]);
@@ -61,68 +62,79 @@ export const Recommendations = () => {
 
     useEffect(() => {
         (async () => {
-            const profileCollection = collection(db,"Profile");
-            const q = query(profileCollection, where("School", "==", "mcmaster"))
-            const docs = await getDocs(q);                
-            
-            let reccomendations: TableRow[] = [];
-            docs.forEach(doc => {            
-                reccomendations.push({
-                    'username': doc.id,
-                    'school': SCHOOLS[`${doc.get("School")}`],
-                    'gyms': GYMS[`${doc.get("Gyms")}`],
-                    'exercises': doc.get("Workout_types").map((workout: string) => EXERCISES[`${workout}`],)
-                });
-            });            
-            console.log(reccomendations);                  
-            setUserRecs(reccomendations);                  
+            const profileData = await get_profile_data(username);
+
+            if (profileData !== null) {            
+                let school = profileData.School;
+                
+                const profileCollection = collection(db,"Profile");
+                const q = query(profileCollection, where("School", "==", school))
+                const docs = await getDocs(q);                
+                
+                let reccomendations: TableRow[] = [];
+                docs.forEach(doc => {            
+                    reccomendations.push({
+                        'username': doc.id,
+                        'school': SCHOOLS[`${doc.get("School")}`],
+                        'gyms': GYMS[`${doc.get("Gyms")}`],
+                        'exercises': doc.get("Workout_types").map((workout: string) => EXERCISES[`${workout}`],)
+                    });
+                });                             
+                setUserRecs(reccomendations);   
+            } else {
+                console.error('profileData is null')
+            }               
         })();        
     }, [])
 
     return (
-        <Container>
-            <Row>
-                <h2 style={{marginBottom: 10}}>Recomendations</h2>
-                <Table responsive bordered>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>School</th>
-                            <th>Gym</th>
-                            <th>Exercises</th>
-                            <th>Appointment</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {userRecs.map((doc: TableRow) => (
-                            <tr>
-                                <td>{doc.username}</td>
-                                <td>{doc.school}</td>
-                                <td>{doc.gyms}</td>
-                                <td>{doc.exercises.join(', ')}</td>
-                                <td>
-                                    <Button
-                                        variant="outlined"
-                                        sx={{width: '140px'}}
-                                        onClick={() => {alert('Profile viewer not implemented')}}
-                                    >
-                                        View Profile
-                                    </Button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
-            </Row>
-            <Row>
-                <Button 
-                    variant="contained" 
-                    sx={{width: '100%', margin: '1rem auto 0', maxWidth: '200px'}}
-                    onClick={() => {navigate("/mainmenu", {state: username})}}
+      <Container>
+        <Row>
+          <h2 style={{ marginBottom: 10 }}>Recomendations</h2>
+          <Table responsive bordered>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>School</th>
+                <th>Gym</th>
+                <th>Exercises</th>
+                <th>Appointment</th>
+              </tr>
+            </thead>
+            <tbody>
+              {userRecs.map((doc: TableRow,i) => (
+                <tr key={i}>
+                  <td>{doc.username}</td>
+                  <td>{doc.school}</td>
+                  <td>{doc.gyms}</td>
+                  <td>{doc.exercises.join(", ")}</td>
+                  <td>
+                    <Button
+                      variant="outlined"
+                      sx={{ width: "140px" }}
+                      onClick={() => {
+                        alert("Profile viewer not implemented");
+                      }}
                     >
-                        Go Back
-                </Button>
-            </Row>
-        </Container>
-    )
+                      View Profile
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Row>
+        <Row>
+          <Button
+            variant="contained"
+            sx={{ width: "100%", margin: "1rem auto 0", maxWidth: "200px" }}
+            onClick={() => {
+              navigate("/mainmenu", { state: username });
+            }}
+          >
+            Go Back
+          </Button>
+        </Row>
+      </Container>
+    );
 }
