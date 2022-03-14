@@ -4,7 +4,7 @@ import { FormControl, InputLabel, OutlinedInput,  TextField, Select, MenuItem, B
 import { useEffect, useState } from "react";
 
 import {Container, Row, Col} from "react-bootstrap";
-import { create_new_profile, get_profile_data } from "../profile/profile_functions";
+import { create_new_profile, get_profile_data, update_profile } from "../profile/profile_functions";
 import { getGyms, getSchools, getWorkoutTypes } from "../search/Search";
 import {days, initialFormState} from './data';
 import ProfileTimePicker, {TimeslotObject}  from './ProfileTimePicker';
@@ -30,45 +30,62 @@ const emptyObject = Object.freeze({});
 
 export default function ProfileView(props: any){
 
-    const [data, setData] = useState<ProfileViewStaticData>({
+    const [data, setData] = useState<ProfileViewStaticData>({ // this is just static data to be selected from the drop downs
         schoolNames: [],
         gymNames: [],
         workoutNames: []
     });
 
-
     // Form state
     const location: {[key: string]: any} = useLocation();
     const navigate = useNavigate();
+    const goToMainMenu = () => {
+        navigate("/mainmenu", {state: username ?? form.username});
+    }
+
     const username = location.state;
     const [form, setForm] = useState<DocumentData>({...initialFormState, username});
 
-    useAsyncEffect(async (isActive) => {
+    const anyFormFieldIsntLoaded = () => {
+        console.log(form);
+        const values = Object.values(form);
+        for (const value of values){
+            if (value && value.hasOwnProperty('length') && value.length === 0){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    useEffect(() => {
 
         if (props.mode === AuthPage.MAIN_MENU){
-            const profileData = await get_profile_data(username);
-            if (!isActive()) return;
-
-            if (profileData != null){
-                console.log(profileData);
-                setForm(profileData);
-            }
+            const profileData = get_profile_data(username).then(profileData => {
+                if (profileData != null){
+                    // there is a descrepancy between field names in the form versus what the firebase record returns... some fields are capitalized in the retrieved firebase records
+                    setForm({
+                        username,
+                        gyms: profileData.Gyms,
+                        gender: profileData.Gender,
+                        school: profileData.School,
+                        workout_types: profileData.Workout_types,
+                        timeslots_available: profileData.timeslots_available[0]
+                    });
+                }
+            });
         }  
 
-        const [schoolNames, gymNames, workoutNames] = await Promise.all([
+        Promise.all([
             getSchools(),
             getGyms(),
             getWorkoutTypes()
-        ]);
-
-        if (!isActive()) return;
-
-        setData({
-            schoolNames: Object.keys(schoolNames ?? emptyObject),
-            gymNames: Object.keys(gymNames ?? emptyObject),
-            workoutNames: Object.keys(workoutNames ?? emptyObject)
-        });
-
+        ]).then(([schoolNames, gymNames, workoutNames]) => {
+            setData({
+                schoolNames: Object.keys(schoolNames ?? emptyObject),
+                gymNames: Object.keys(gymNames ?? emptyObject),
+                workoutNames: Object.keys(workoutNames ?? emptyObject)
+            });
+        })
     }, []);
 
     // Error states
@@ -82,11 +99,18 @@ export default function ProfileView(props: any){
         const gyms_arr = gyms.map(function(item) {
             return item.trim();
           });
-        const status:Array<any> = await create_new_profile(username, gender, gyms_arr, school, workout_types_arr, timeslots_available, props.uid)
+
+        let status : Array<any>;
+        if (props.mode === AuthPage.MAIN_MENU){
+            status = await update_profile(username, gender, gyms_arr, school, workout_types_arr, timeslots_available, props.uid);
+        }
+        else{
+            status = await create_new_profile(username, gender, gyms_arr, school, workout_types_arr, timeslots_available, props.uid);
+        }
 
         if (status[0]){
             alert("Successfully built profile!");
-            props.goToMainMenu(username); // update username in AuthFlow and intent to MainMenu
+            goToMainMenu(); // update username in AuthFlow and intent to MainMenu
         }
         else{
             // error state active
@@ -96,70 +120,28 @@ export default function ProfileView(props: any){
     }
 
     const onChange = (field: string) => (event: any) => {
-        console.log(form);
         setForm({ ...form, [field]: event.target.value });
     };
  
-    const onChangeTimeslots = (field: string, value: string) => {
-        setForm({...form, timeslots: {...form.timeslots_available, [field]: value} });
+    const onChangeTimeslots = (field: string) => (event: any) => {
+        setForm({...form, timeslots_available: {...form.timeslots_available, [field]:event.target.value} });
     };
 
-    // const assignSchoolNames = async () => {
-    //     const schools = await getSchools();
-    //     if (schools){
-    //         setSchoolNames(Object.keys(schools));
-    //     }
-    // }
-    // const assignGymNames = async () => {
-    //     const gyms = await getGyms();
-    //     if (gyms){
-    //         setGymNames(Object.keys(gyms));
-    //     }
-    // }
-    // const assignWorkoutNames = async () => {
-    //     const Workout_Types = await getWorkoutTypes();
-    //     if (Workout_Types){
-    //         setWorkoutNames(Object.keys(Workout_Types));
-    //     }
-    // }
-
-    const setFormState = async () => {
-        const profileData = await get_profile_data(location.state);
-        if (profileData !== null){
-            console.log(profileData);
-            setForm(profileData);
-        }
+    const onChangeTimeRange = (field: string, value: any) => {
+        setForm({...form, timeslots_available: {...form.timeslots_available, [field]: value} });
     }
 
 
-    // update initially
-    useEffect(() => {     
-        // TODO @shazil-arif below might not be correct functionality but the commented
-        //  section above was calling setSchoolNames(), etc. which isn't in this file
-        (async () => {
-            if (props.mode === AuthPage.MAIN_MENU){
-                setFormState()
-            }
-            
-            const schools = await getSchools();
-            const gyms = await getGyms();
-            const Workout_Types = await getWorkoutTypes(); 
-            setData({
-                schoolNames: Object.keys(schools ?? emptyObject),
-                gymNames: Object.keys(gyms ?? emptyObject),
-                workoutNames: Object.keys(Workout_Types ?? emptyObject)
-            });
-        })();
-
-        // eslint-disable-next-line
-    }, []);
+    if (anyFormFieldIsntLoaded() && props.mode === AuthPage.MAIN_MENU){
+        return <h1 style={{textAlign: 'center'}}>Loading Details....</h1>;
+    }
 
     return(        
         <Container>
             <h1 style={{color:"red", display: errorState ? 'none' : 'inline'}}>{errorMsg}</h1>
             
             <h3 style={{textAlign: 'center'}}>Enter Details in lowercase!</h3>
-
+            
             <FormControl sx={centeredFieldStyle} variant="outlined">
 
                 <TextField
@@ -217,7 +199,7 @@ export default function ProfileView(props: any){
                 labelId="demo-multiple-name-label"
                 id="demo-multiple-name"
                 multiple
-                value={[form.gyms]}
+                value={form.gyms}
                 onChange={onChange('gyms')}
                 input={<OutlinedInput label="Gyms" />}
                 >
@@ -239,7 +221,8 @@ export default function ProfileView(props: any){
                 id="demo-multiple-name"
                 multiple
                 // TODO handle this in a cleaner way
-                value={props.mode === AuthPage.MAIN_MENU ? [form.workout_types] : form.workout_types}
+                // value={props.mode === AuthPage.MAIN_MENU ? [form.workout_types] : form.workout_types}
+                value={form.workout_types}
                 onChange={onChange('workout_types')}
                 input={<OutlinedInput label="workout types" />}
                 >
@@ -265,8 +248,10 @@ export default function ProfileView(props: any){
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         // TODO handle this in a cleaner way
-                        value={props.mode === AuthPage.MAIN_MENU ? [form.timeslots_available.day] : form.timeslots_available.day}
-                        onChange={(event: any) => onChangeTimeslots('day', event.target.value)}
+                        // value={props.mode === AuthPage.MAIN_MENU ? [form.timeslots_available.day] : form.timeslots_available.day}
+                        value={form.timeslots_available.day}
+
+                        onChange={onChangeTimeslots('day')}
                         label="day"
                     >
                         {days.map((option) => {
@@ -284,24 +269,27 @@ export default function ProfileView(props: any){
         
             <Row style={{marginLeft: '10%', marginRight: '10%', marginBottom: '5%'}}>
                 <Col style={{paddingLeft: 0, paddingRight: 20}}>
-                    <ProfileTimePicker label="Start Time" identifier="start_time" onChange={onChangeTimeslots}/>
+                    <ProfileTimePicker initialValue={form.timeslots_available.start_time} label="Start Time" identifier="start_time" onChange={onChangeTimeRange}/>
                 </Col>
                 <Col style={{paddingLeft: 0, paddingRight: 0}}>
-                    <ProfileTimePicker label="End Time" identifier="end_time" onChange={onChangeTimeslots}/>
+                    <ProfileTimePicker initialValue ={form.timeslots_available.end_time} label="End Time" identifier="end_time" onChange={onChangeTimeRange}/>
                 </Col>
             </Row>
 
             
             <Row style={centeredFieldStyle}>
+                {/* Only Render this if viewing from main menu */}
+                {props.mode == AuthPage.MAIN_MENU ? 
                 <Col style={{textAlign: 'center'}}>
                     <Button
                         sx={{width: '100%', maxWidth: '150px'}}
                         variant="contained"
-                        onClick={() => {navigate("/mainmenu", {state: username})}}
+                        onClick={goToMainMenu}
                         >
                             Go Back
                     </Button>
                 </Col>
+                : null}
                 <Col style={{textAlign: 'center'}}>
                     <Button
                         sx={{width: '100%', maxWidth: '150px'}}

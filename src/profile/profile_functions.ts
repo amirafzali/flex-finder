@@ -31,6 +31,32 @@ export async function load_existing_user(uid: string){
     return null;
 }
 
+export async function update_profile(username: string, gender: string, gyms:Array<string>, school:string, workout_types:Array<string>, timeslots_available:Array<timeslot_object>, uid: string){
+    const profileCollection = collection(db,"Profile");
+     // Pre-processing
+    let timeslots_of_dicts:{ [key: string]: any } = {}
+    for (let i = 0; i<timeslots_available.length; i++){
+        let timeslot = timeslots_available[i];
+        timeslots_of_dicts[i.toString()] = timeslot;
+    }
+
+    // TODO: This might be wrong for update_profile
+
+    const schedule = {"active": null, "pending": null};
+    const data = {
+        "Gender": gender,
+        "Gyms": gyms,
+        "School": school,
+        "Workout_types": workout_types,
+        "timeslots_available": timeslots_of_dicts,
+        "schedule": schedule
+    }
+    await updateDoc(doc(profileCollection, username), data);
+    console.log("user: " + username + " successfully updated!");
+    return [true, "success"];
+
+}
+
 export async function create_new_profile(username: string, gender: string, gyms:Array<string>, school:string, workout_types:Array<string>, timeslots_available:Array<timeslot_object>, uid: string){
     
     // validate inputs

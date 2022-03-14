@@ -12,6 +12,7 @@ import { useState } from "react";
 import { FormControl,  TextField} from "@mui/material";
 import Button from "@mui/material/Button";
 import { create_user } from "./fb-functions";
+import {RegisterDetails} from './Register';
 
 import ProfileView from '../profile/ProfileView';
 
@@ -42,7 +43,8 @@ export function AuthScreen() {
             <h1 id="auth-title">Flex Finder 💪</h1>
             {page === AuthPage.LOGIN && <Login goToRegister={goToRegister} goToMainMenu={goToMainMenu}/>}
             {page === AuthPage.REGISTER && <Register goToLogin={goToLogin} goToRegisterDetails={goToRegisterDetails}/>}
-            {page === AuthPage.REGISTER_DETAILS && <ProfileView uid={uid} goToMainMenu={goToMainMenu}/>}
+            {/* {page === AuthPage.REGISTER_DETAILS && <RegisterDetails uid={uid} goToMainMenu={goToMainMenu}/>} */}
+            {page === AuthPage.REGISTER_DETAILS && <ProfileView mode={AuthPage.REGISTER_DETAILS} uid={uid} goToMainMenu={goToMainMenu}/>}
         </Paper>
     )
 }
