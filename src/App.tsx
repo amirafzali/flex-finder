@@ -15,7 +15,7 @@ import { FitnessTracker } from './tracker/FitnessTracker';
 import ProfileView from './profile/ProfileView';
 import Paper from '@mui/material/Paper';
 import {AuthPage} from './authenticate/AuthFlow';
-import { Recommendations } from './recommendations/recommendations'
+import { Recommendations } from './recommendations/RecommendationsView'
 
 function App() {
 
