@@ -314,7 +314,7 @@ export function SearchResultsScreen(props: any){
                     <Col>
                         <Card sx={{ minWidth: 280, marginTop: 1 }}>
                             <CardContent>
-                                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                <Typography sx={{ fontSize: 20, textTransform: 'capitalize' }} color="text.secondary" gutterBottom>
                                 Username: {item}
                                 </Typography>
                             </CardContent>
