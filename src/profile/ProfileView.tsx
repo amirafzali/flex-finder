@@ -57,11 +57,24 @@ export default function ProfileView(props: any){
         return false;
     }
 
+
     useEffect(() => {
 
         if (props.mode === AuthPage.MAIN_MENU){
             const profileData = get_profile_data(username).then(profileData => {
                 if (profileData != null){
+                    // bandage fix, get max key for timeslots
+                    const getIntKeys = () : Array<number> => {
+                        const keys = Object.keys(profileData.timeslots_available);
+                        let newKeys : Array<number> = [];
+                        for (const key of keys){
+                            newKeys.push(parseInt(key));
+                        }
+                        return newKeys;
+                    }
+                    const getMax = () => {
+                        return Math.max.apply(null, getIntKeys());
+                    }
                     // there is a descrepancy between field names in the form versus what the firebase record returns... some fields are capitalized in the retrieved firebase records
                     setForm({
                         username,
@@ -69,7 +82,7 @@ export default function ProfileView(props: any){
                         gender: profileData.Gender,
                         school: profileData.School,
                         workout_types: profileData.Workout_types,
-                        timeslots_available: profileData.timeslots_available[0]
+                        timeslots_available: profileData.timeslots_available[getMax()]
                     });
                 }
             });
@@ -128,6 +141,7 @@ export default function ProfileView(props: any){
     };
 
     const onChangeTimeRange = (field: string, value: any) => {
+        console.log(field, value);
         setForm({...form, timeslots_available: {...form.timeslots_available, [field]: value} });
     }
 

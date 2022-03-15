@@ -16,6 +16,7 @@ export default function ProfileTimePicker({initialValue, label, identifier, onCh
   if (val.length === 0){
     val = '12';
   }
+
   const date = new Date(`1995-12-17T${val}:00:00`);
   const [value, setValue] = React.useState<Date>(date);
 
