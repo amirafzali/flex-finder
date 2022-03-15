@@ -7,6 +7,7 @@ import {
   EXERCISES,
   SCHOOLS,
   DAYS,
+  GYMS,
   HOURS,
 } from "../recommendations/field_mappings";
 
@@ -32,12 +33,10 @@ export default function ProfileView(props: any) {
                 setUserData({
                     gender: profileData.Gender,
                     school: profileData.School,
+                    gyms: profileData.Gyms,
                     workout_types: profileData.Workout_types,
                     timeslots_available: profileData.timeslots_available
-                });
-                console.log( profileData.Workout_types);
-                console.log( profileData.timeslots_available);
-                
+                });                
             }
         });
     },[username]);
@@ -66,22 +65,38 @@ export default function ProfileView(props: any) {
               <strong>School:</strong> {SCHOOLS[userData.school]}
             </h3>
             <h3>
+              <strong>Gyms:</strong>
+            </h3>
+            <ul>
+              {userData.gyms.map((x: any, i: number) => (
+                <li key={i} style={largerFont}>
+                  {GYMS[x]}
+                </li>
+              ))}
+            </ul>
+            <h3>
               <strong>Exercises:</strong>
             </h3>
             <ul>
               {userData.workout_types.map((x: any, i: number) => (
-                <li key={i} style={largerFont}>{EXERCISES[x]}</li>
+                <li key={i} style={largerFont}>
+                  {EXERCISES[x]}
+                </li>
               ))}
             </ul>
             <h3>
               <strong>Timeslots Available:</strong>
             </h3>
             <ul>
-              {Object.entries(userData.timeslots_available).map((x: any, i: number) => (
-                <li style={largerFont} key={i}>
-                  {`${DAYS[x[1].day]} ${HOURS[x[1].start_time]} - ${HOURS[x[1].end_time]}`}
-                </li>
-              ))}
+              {Object.entries(userData.timeslots_available).map(
+                (x: any, i: number) => (
+                  <li style={largerFont} key={i}>
+                    {`${DAYS[x[1].day]} ${HOURS[x[1].start_time]} - ${
+                      HOURS[x[1].end_time]
+                    }`}
+                  </li>
+                )
+              )}
             </ul>
           </Modal.Body>
         </Modal>
