@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
-import { collection, deleteDoc, doc, query, getDocs, where, QuerySnapshot } from 'firebase/firestore';
+import { collection, query, getDocs, where } from 'firebase/firestore';
 import { db } from "../firebase/firebase";
 import { Container, Row } from "react-bootstrap";
 import Table from 'react-bootstrap/Table'
 import { useNavigate, useLocation } from "react-router-dom";
 import { firebaseAuth } from "../firebase/firebase";
-import { getWorkoutTypes } from "../search/Search";
 import { get_profile_data } from "../profile/profile_functions";
 
 
-import { SCHOOLS, EXERCISES, GYMS } from "../recommendations/field_mappings";
+import { SCHOOLS, GYMS } from "../recommendations/field_mappings";
 
 export const Recommendations = () => {
     const location:{ [key: string]: any } = useLocation();
@@ -33,9 +32,8 @@ export const Recommendations = () => {
     })
     interface UserRow {
         'username': String,
-        'gyms': String,
-        'school': String,
-        'exercises': String[]
+        'gyms': String[],
+        'school': String
     }
 
     useEffect(() => {
@@ -53,10 +51,9 @@ export const Recommendations = () => {
                 
                 docs.forEach(doc => {            
                     recommendations.push({
-                        'username': doc.id,
-                        'school': SCHOOLS[`${doc.get("School")}`],
-                        'gyms': GYMS[`${doc.get("Gyms")}`],
-                        'exercises': doc.get("Workout_types").map((workout: string) => EXERCISES[`${workout}`],)
+                      username: doc.id,
+                      school: SCHOOLS[`${doc.get("School")}`],
+                      gyms: doc.get("Gyms").map((x: any) => GYMS[x]),
                     });
                 });                             
                 setUserRecs(recommendations);   
@@ -77,18 +74,16 @@ export const Recommendations = () => {
               <tr>
                 <th>Name</th>
                 <th>School</th>
-                <th>Gym</th>
-                <th>Exercises</th>
+                  <th>Gyms</th>
                 <th>Appointment</th>
               </tr>
             </thead>
             <tbody>
                 {userRecs.map((user: UserRow, i) => (
                 <tr key={i}>
-                    <td>{user.username}</td>
+                    <td style={{textTransform: 'capitalize'}}>{user.username}</td>
                     <td>{user.school}</td>
-                    <td>{user.gyms}</td>
-                    <td>{user.exercises.join(", ")}</td>
+                    <td>{user.gyms.join(', ')}</td>
                   <td>
                     <Button
                       variant="outlined"
