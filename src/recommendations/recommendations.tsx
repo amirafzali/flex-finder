@@ -10,6 +10,7 @@ import { getWorkoutTypes } from "../search/Search";
 import { get_profile_data } from "../profile/profile_functions";
 
 
+import { SCHOOLS, EXERCISES, GYMS } from "../recommendations/field_mappings";
 
 export const Recommendations = () => {
     const location:{ [key: string]: any } = useLocation();
@@ -30,29 +31,6 @@ export const Recommendations = () => {
         navigate("/");
         }
     })
-    
-    let SCHOOLS: { [key: string]: string } =  {
-        mcmaster: "McMaster",
-        uwaterloo: "University of Waterloo",
-        uoft: "University of Toronto"
-    }
-    
-    let GYMS: { [key: string]: string } = {
-        'mcmaster_dbac': "McMaster DBAC",
-        'uwaterloo_gym2': "UWaterloo Gym 2",
-        'uoft_gym1': "U of T Gym 1",
-        'uwaterloo_gym1': "UWaterloo Gym "
-    }
-    
-    let EXERCISES: { [key: string]: string } = {
-        back: "Back",
-        biceps: "Biceps",
-        cardio: "Cardio",
-        chest: "Chest",
-        core: "Core",
-        shoulders: "Shoulders",
-        triceps: "Triceps",
-    }
     interface UserRow {
         'username': String,
         'gyms': String,
