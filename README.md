@@ -1,10 +1,16 @@
 # Flex Finder
+### Software Capstone | Group 1
+FlexFinder is an exercise scheduling platform that connects university 
+students to build community and partake in regular exercise routines that 
+increase their health and well-being. Our application helps students find 
+like-minded individuals to workout with on campus.
 
-2022 Software Capstone project  | Group 1 - FlexFinder
----
+Our application is available online here:
 
-# Demonstration
-TBD
+[https://flexfinder-53ed1.web.app/](https://flexfinder-53ed1.web.app/)
+
+# Demonstration 
+[3 minute video](https://drive.google.com/file/d/1XVTc6ofCcv41fMVWOgnDtJQpLTQa3mG3/view?resourcekey)
 
 # Development Team
 - Amir Afzali
@@ -13,22 +19,19 @@ TBD
 - Shazil Arif
 - Ross Chapman
 
+# Installation Instructions
+This project was made using TypeScript React
 
-# FlexFinder - Overview
-- A platform for connecting students to exercise together!
-
-# Ways to use:
-- Via React App locally
-- Via WebAPP: TBD
-
-# Run Locally - Installation Instructions
-- This project was made using TypeScript
-```installation:
-Install node/npm if you haven't already: https://nodejs.org/en/download/
-git clone https://github.com/amirafzali/flex-finder.git
-Use code editor of your choice(VS CODE) and cd into the main directory.
-Pastee your `process.env` file in this directory. This contains information on API keys for firebase, you can retrieve it from your Firebase console --> project --> project settings
-type `npm install`. This will use the package.json to install all the necessary libraries for the project
-type `npm start`
-navigate to --> localhost:3000
+1. Install node/npm if you haven't already: [Node.js](https://nodejs.org/en/download)
+2. Download the repository:
 ```
+git clone https://github.com/amirafzali/flex-finder.git
+cd flex-finder
+```
+3. Copy `process.env` to a `.env` file in the root directory. This contains information on API keys for firebase.
+4. Install dependencies and run development server
+```
+npm install
+npm start
+```
+5. Navigate to [localhost:3000](http://localhost:3000/)
