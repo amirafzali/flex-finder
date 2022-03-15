@@ -10,7 +10,7 @@ import { get_profile_data } from "../profile/profile_functions";
 
 import ProfileModal from "../profile/ProfileModal";
 
-import { SCHOOLS, GYMS } from "../recommendations/field_mappings";
+import { SCHOOLS, GYMS } from "./field_mappings";
 
 export const Recommendations = () => {
   const location: { [key: string]: any } = useLocation();
@@ -72,7 +72,7 @@ export const Recommendations = () => {
         setShow={setShowModal}
         username={selectedUsername}
       />
-      <Container>
+      <Container style={{ maxWidth: "600px" }}>
         <Row>
           <h2 style={{ marginBottom: 10 }}>Recommendations from your school</h2>
           <Table responsive bordered>
@@ -80,7 +80,6 @@ export const Recommendations = () => {
               <tr>
                 <th>Name</th>
                 <th>School</th>
-                <th>Gyms</th>
                 <th>Appointment</th>
               </tr>
             </thead>
@@ -91,8 +90,7 @@ export const Recommendations = () => {
                     {user.username}
                   </td>
                   <td>{user.school}</td>
-                  <td>{user.gyms.join(", ")}</td>
-                  <td>
+                  <td style={{ width: "157px" }}>
                     <Button
                       variant="outlined"
                       sx={{ width: "140px" }}
