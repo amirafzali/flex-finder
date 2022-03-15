@@ -20,7 +20,7 @@ export const initialFormState : DocumentData = {
     workout_types: [],
     timeslots_available:{
         day: "",
-        start_time: "",
-        end_time: ""
+        start_time: 11,
+        end_time: 12
     }
 }
