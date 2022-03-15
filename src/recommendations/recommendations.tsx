@@ -79,11 +79,13 @@ export const Recommendations = () => {
               </tr>
             </thead>
             <tbody>
-                {userRecs.map((user: UserRow, i) => (
+                {userRecs.map((user: UserRow, i: number) => (
                 <tr key={i}>
-                    <td style={{textTransform: 'capitalize'}}>{user.username}</td>
+                    <td style={{ textTransform: "capitalize" }}>
+                      {user.username}
+                    </td>
                     <td>{user.school}</td>
-                    <td>{user.gyms.join(', ')}</td>
+                    <td>{user.gyms.join(", ")}</td>
                   <td>
                     <Button
                       variant="outlined"
