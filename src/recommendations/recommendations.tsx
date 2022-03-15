@@ -17,7 +17,7 @@ export const Recommendations = () => {
     const navigate = useNavigate();
 
     // const [userRecs, setUserRecs] = useState<{[key: number]: Log}>([]);
-    const [userRecs, setUserRecs] = useState<TableRow[]>([]);
+    const [userRecs, setUserRecs] = useState<UserRow[]>([]);
     // const [userRecs, setUserRecs] = useState<Log | null>(null);
 
     // check if session active
@@ -53,7 +53,7 @@ export const Recommendations = () => {
         shoulders: "Shoulders",
         triceps: "Triceps",
     }
-    interface TableRow {
+    interface UserRow {
         'username': String,
         'gyms': String,
         'school': String,
@@ -71,16 +71,17 @@ export const Recommendations = () => {
                 const q = query(profileCollection, where("School", "==", school))
                 const docs = await getDocs(q);                
                 
-                let reccomendations: TableRow[] = [];
+                let recommendations: UserRow[] = [];
+                
                 docs.forEach(doc => {            
-                    reccomendations.push({
+                    recommendations.push({
                         'username': doc.id,
                         'school': SCHOOLS[`${doc.get("School")}`],
                         'gyms': GYMS[`${doc.get("Gyms")}`],
                         'exercises': doc.get("Workout_types").map((workout: string) => EXERCISES[`${workout}`],)
                     });
                 });                             
-                setUserRecs(reccomendations);   
+                setUserRecs(recommendations);   
             } else {
                 console.error('profileData is null')
             }               
@@ -90,7 +91,9 @@ export const Recommendations = () => {
     return (
       <Container>
         <Row>
-          <h2 style={{ marginBottom: 10 }}>Recomendations</h2>
+            <h2 style={{ marginBottom: 10 }}>
+              Recommendations from your school
+            </h2>
           <Table responsive bordered>
             <thead>
               <tr>
@@ -102,12 +105,12 @@ export const Recommendations = () => {
               </tr>
             </thead>
             <tbody>
-              {userRecs.map((doc: TableRow,i) => (
+                {userRecs.map((user: UserRow, i) => (
                 <tr key={i}>
-                  <td>{doc.username}</td>
-                  <td>{doc.school}</td>
-                  <td>{doc.gyms}</td>
-                  <td>{doc.exercises.join(", ")}</td>
+                    <td>{user.username}</td>
+                    <td>{user.school}</td>
+                    <td>{user.gyms}</td>
+                    <td>{user.exercises.join(", ")}</td>
                   <td>
                     <Button
                       variant="outlined"
