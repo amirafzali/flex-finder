@@ -99,7 +99,7 @@ export default function ProfileView(props: any){
                 workoutNames: Object.keys(workoutNames ?? emptyObject)
             });
         })
-    }, []);
+    }, [username, props.mode]);
 
     // Error states
     const [errorState, seterrorState] = useState(false);
@@ -293,7 +293,7 @@ export default function ProfileView(props: any){
             
             <Row style={centeredFieldStyle}>
                 {/* Only Render this if viewing from main menu */}
-                {props.mode == AuthPage.MAIN_MENU ? 
+                {props.mode === AuthPage.MAIN_MENU ? 
                 <Col style={{textAlign: 'center'}}>
                     <Button
                         sx={{width: '100%', maxWidth: '150px'}}

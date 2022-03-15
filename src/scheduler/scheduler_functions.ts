@@ -72,8 +72,8 @@ export async function send_request(sender_username:string, recipient_username:st
 
     // isValid timeslot for recipient and sender
     console.log(sender_username);
-    const recipient_timeslot_match_size = await search_by_timeslot(new Set([recipient_username]), timeslot=timeslot).then((response) => {return response.size});
-    const sender_timeslot_match_size = await search_by_timeslot(new Set([sender_username]), timeslot=timeslot).then((response) => {return response.size});
+    const recipient_timeslot_match_size = await search_by_timeslot(new Set([recipient_username]), timeslot).then((response) => {return response.size});
+    const sender_timeslot_match_size = await search_by_timeslot(new Set([sender_username]), timeslot).then((response) => {return response.size});
 
     if ((recipient_timeslot_match_size) < 1){
         console.log(recipient_username + " doesn't have the matching timeslot");
