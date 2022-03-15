@@ -155,7 +155,7 @@ async function validate_inputs(username: string, gender: string, gyms:Array<stri
     const profileData = await (getDoc(doc(profileCollection,username))).then((response)=>response.data())
 
     // validate username - check if already exists!
-    if ((profileData) || (typeof profileData === 'undefined') || (typeof profileData === null)){
+    if ((profileData) || (typeof profileData === 'undefined')){
         console.log(profileData);
         console.log(username + " is invalid/or already taken. Please try another.");
         return [false, username + " is invalid/or already taken. Please try another."]

@@ -63,7 +63,7 @@ export const Recommendations = () => {
         console.error("profileData is null");
       }
     })();
-  }, []);
+  }, [username]);
 
   return (
     <>
