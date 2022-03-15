@@ -8,6 +8,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { firebaseAuth } from "../firebase/firebase";
 import { get_profile_data } from "../profile/profile_functions";
 
+import ProfileModal from "../profile/ProfileModal";
 
 import { SCHOOLS, GYMS } from "../recommendations/field_mappings";
 
@@ -19,15 +20,17 @@ export const Recommendations = () => {
     // const [userRecs, setUserRecs] = useState<{[key: number]: Log}>([]);
     const [userRecs, setUserRecs] = useState<UserRow[]>([]);
     // const [userRecs, setUserRecs] = useState<Log | null>(null);
+    const [selectedUsername, setSelectedUsername] = useState(username);
+    const [showModal, setShowModal] = useState(false);
 
     // check if session active
     firebaseAuth.onAuthStateChanged((user:any) => {
         if (user){
-            console.log("session active");
+          console.log("session active");
         }
         else{
-        // session expired
-        navigate("/");
+          // session expired
+          navigate("/");
         }
     })
     interface UserRow {
@@ -64,55 +67,65 @@ export const Recommendations = () => {
     }, [])
 
     return (
-      <Container>
-        <Row>
+      <>
+        <ProfileModal
+          show={showModal}
+          setShow={setShowModal}
+          username={selectedUsername}
+        />
+        <Container>
+          <Row>
             <h2 style={{ marginBottom: 10 }}>
               Recommendations from your school
             </h2>
-          <Table responsive bordered>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>School</th>
+            <Table responsive bordered>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>School</th>
                   <th>Gyms</th>
-                <th>Appointment</th>
-              </tr>
-            </thead>
-            <tbody>
+                  <th>Appointment</th>
+                </tr>
+              </thead>
+              <tbody>
                 {userRecs.map((user: UserRow, i: number) => (
-                <tr key={i}>
+                  <tr key={i}>
                     <td style={{ textTransform: "capitalize" }}>
                       {user.username}
                     </td>
                     <td>{user.school}</td>
                     <td>{user.gyms.join(", ")}</td>
-                  <td>
-                    <Button
-                      variant="outlined"
-                      sx={{ width: "140px" }}
-                      onClick={() => {
-                        alert("Profile viewer not implemented");
-                      }}
-                    >
-                      View Profile
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Row>
-        <Row>
-          <Button
-            variant="contained"
-            sx={{ width: "100%", margin: "1rem auto 0", maxWidth: "200px" }}
-            onClick={() => {
-              navigate("/mainmenu", { state: username });
-            }}
-          >
-            Go Back
-          </Button>
-        </Row>
-      </Container>
+                    <td>
+                      <Button
+                        variant="outlined"
+                        sx={{ width: "140px" }}
+                        onMouseEnter={() => {
+                          setSelectedUsername(user.username);
+                        }}
+                        onClick={() => {
+                          setShowModal(true);
+                        }}
+                      >
+                        View Profile
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </Row>
+          <Row>
+            <Button
+              variant="contained"
+              sx={{ width: "100%", margin: "1rem auto 0", maxWidth: "200px" }}
+              onClick={() => {
+                navigate("/mainmenu", { state: username });
+              }}
+            >
+              Go Back
+            </Button>
+          </Row>
+        </Container>
+      </>
     );
 }

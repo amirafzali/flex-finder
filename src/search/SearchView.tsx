@@ -11,6 +11,8 @@ import {Container, Row, Col} from "react-bootstrap";
 import { getGyms, getSchools, getWorkoutTypes, search_function } from "./Search";
 import { useNavigate, useLocation } from "react-router-dom";
 
+import ProfileModal from "../profile/ProfileModal";
+
 enum SearchPage {
     SEARCH,
     RESULTS
@@ -280,18 +282,31 @@ export default function SearchScreen(props:any){
         </Row>
 
     </Container>
-            
+
     )
 }
 
 export function SearchResultsScreen(props: any){
+    const location: { [key: string]: any } = useLocation();
+    const username = location.state;
+
     const [searchResult, setsearchResult] = useState<Set<any>>(props.searchResult);
+    
+    const [selectedUsername, setSelectedUsername] = useState(username);
+    const [showModal, setShowModal] = useState(false);
+
     console.log(searchResult);
 
-    return(
-        <Container className="align-items-center">
-        <ul className="list-group">
-        {(Array.from(searchResult)).map((item:string) => {
+    return(        
+        <>
+            <ProfileModal
+            show={showModal}
+            setShow={setShowModal}
+            username={selectedUsername}
+            />
+            <Container className="align-items-center">
+            <ul className="list-group">
+            {(Array.from(searchResult)).map((item:string) => {
                 return (
 
                     <Container key={item}>
@@ -305,11 +320,17 @@ export function SearchResultsScreen(props: any){
                             </CardContent>
                             <CardContent>
                             <Button 
-                                    size="small"
-                                    sx={{width: '70%', marginBottom: 1, marginLeft: 4}}
-                                    variant="contained" 
-                                    color="success"
-                                    onClick={() => alert("Profile Viewer still in development...")}>View Profile
+                                size="small"
+                                sx={{width: '70%', marginBottom: 1, marginLeft: 4}}
+                                variant="contained" 
+                                color="success"
+                                onMouseEnter={() => {
+                                    setSelectedUsername(item);
+                                }}
+                                onClick={() => {
+                                    setShowModal(true);
+                                }}
+                            >View Profile
                             </Button>
                             </CardContent>
                         </Card>
@@ -318,15 +339,16 @@ export function SearchResultsScreen(props: any){
                     </Container>
                 );
             })}
-        </ul>
-        <br/>
-        <Button 
-        variant="contained" 
-        sx={{width: '50%', marginBottom: 6, marginLeft: 4}}
-        onClick={() => props.goToSearch()}
-        >
-            Go back
-        </Button>
-        </Container>
+            </ul>
+            <br/>
+            <Button 
+            variant="contained" 
+            sx={{width: '50%', marginBottom: 6, marginLeft: 4}}
+            onClick={() => props.goToSearch()}
+            >
+                Go back
+            </Button>
+            </Container>
+        </>
     )
 }
